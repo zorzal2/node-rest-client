@@ -1,4 +1,4 @@
-# Typescript empty app
+# Typescript empty project
 
 Es un proyecto de typescript preconfigurado con scripts, TSLint, Jest, .gitignore, etc. para usar como base de aplicaciones y librerías.
 
