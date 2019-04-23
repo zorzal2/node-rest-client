@@ -1,3 +1,4 @@
 export default  {
-  hello: process.env.HELLO_WORLD || 'Hello world!'
+  requestTimeout: process.env.REST_CLIENT_TIMEOUT ?
+    Number.parseInt(process.env.REST_CLIENT_TIMEOUT, 10) : 120000
 };

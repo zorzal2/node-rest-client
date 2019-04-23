@@ -1,33 +1,37 @@
 {
-  "name": "@zorzal2/hello-world",
+  "name": "@zorzal2/rest-client",
   "version": "0.1.0",
-  "description": "Base para proyectos en typescript",
-  "main": "src/index.js",
+  "description": "REST Client",
+  "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "test": "jest",
     "tsc": "tsc",
     "watch-ts": "tsc -w",
     "build": "tsc && npm run tslint",
+    "prepublishOnly": "npm run-script build",
     "start": "node dist/index.js",
     "launch": "npm run build && npm start",
     "tslint": "tslint -c tslint.json -p tsconfig.json 'src/**/*.ts'"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/zorzal2/typescript-empty-app.git"
+    "url": "git+https://github.com/zorzal2/node-rest-client.git"
   },
-  "keywords": [
-    "logger"
-  ],
-  "author": "jperez",
+  "author": "llobeto",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/zorzal2/typescript-empty-app/issues"
+    "url": "https://github.com/zorzal2/node-rest-client/issues"
   },
-  "homepage": "https://github.com/zorzal2/typescript-empty-app#readme",
+  "homepage": "https://github.com/zorzal2/node-rest-client#readme",
   "dependencies": {
-    "@types/node": "^11.13.4"
+    "@types/node": "^11.13.4",
+    "@types/qs": "^6.5.3",
+    "@zorzal2/common": "^0.1.4",
+    "@zorzal2/context": "^0.1.2",
+    "@zorzal2/logger": "^0.1.2",
+    "axios": "^0.18.0",
+    "qs": "^6.7.0"
   },
   "devDependencies": {
     "@types/jest": "^24.0.11",

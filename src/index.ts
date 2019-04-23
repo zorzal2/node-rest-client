@@ -1,3 +1,2 @@
-import conf from './conf';
-
-console.log(conf.hello);
+export { connect } from './client';
+export { ErrorCodes } from './error-codes';
