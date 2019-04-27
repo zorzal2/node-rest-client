@@ -1,6 +1,6 @@
-import Common from '@zorzal2/common';
+import { code } from '@zorzal2/common';
 
-export const ErrorCodes = Common.code.complete({
+export const ErrorCodes = code.complete({
   invalidEndpoint: {
     message: 'La URL del endpoint no es válida.'
   },
