@@ -2,16 +2,21 @@
  * HTTP Client
  */
 
-export type HttpMethod = 'GET' | 'POST' | 'DELETE' | 'PUT' | 'PATCH';
+export type HttpMethodName = 'GET' | 'POST' | 'DELETE' | 'PUT' | 'PATCH';
 
-/** Representa una operación de HTTP */
-export class HttpOperation {
-  constructor(
-    readonly method: HttpMethod,
-    readonly requiresAnObject: boolean,
-    readonly expectsSomething: boolean
+/** Representa un método de HTTP */
+export class HttpMethod {
+  static get: HttpMethod = new HttpMethod('GET', false);
+  static post: HttpMethod = new HttpMethod('POST', true);
+  static delete: HttpMethod = new HttpMethod('DELETE', false);
+  static put: HttpMethod = new HttpMethod('PUT', true);
+  static patch: HttpMethod = new HttpMethod('PATCH', true);
+
+  private constructor(
+    readonly name: HttpMethodName,
+    readonly requiresAnObject: boolean
   ) {
-   }
+  }
 }
 
 /** Request HTTP */
@@ -20,11 +25,11 @@ export class HttpRequest {
   readonly description: string;
 
   constructor(
-    readonly operation: HttpOperation,
+    readonly method: HttpMethod,
     readonly url: string,
     readonly data?: object
   ) {
-    this.description = `${operation.method} ${url}`;
+    this.description = `${method.name} ${url}`;
   }
 }
 

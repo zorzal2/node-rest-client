@@ -1,4 +1,5 @@
 import functionProxy from '../src/rest-client/func-path-proxy';
+import { expect } from 'chai';
 
 const X = {
   get: functionProxy(function (o: object, n: number) {
@@ -10,69 +11,69 @@ const X = {
 };
 
 describe('Path Proxy', () => {
-  test('Invoke method with arguments', () => {
+  it('Invoke method with arguments', () => {
 
     let result = X.get.personas[123].phones.type({ hello: 'world' }, 77);
 
-    expect(result.path).toHaveLength(4);
-    expect(result.path[0]).toBe('personas');
-    expect(result.path[1]).toBe('123');
-    expect(result.path[2]).toBe('phones');
-    expect(result.path[3]).toBe('type');
+    expect(result.path).to.have.lengthOf(4);
+    expect(result.path[0]).to.eq('personas');
+    expect(result.path[1]).to.eq('123');
+    expect(result.path[2]).to.eq('phones');
+    expect(result.path[3]).to.eq('type');
 // tslint:disable-next-line: no-string-literal
-    expect(result.o['hello']).toBe('world');
-    expect(result.n).toBe(77);
+    expect(result.o['hello']).to.eq('world');
+    expect(result.n).to.eq(77);
   });
-  test('Invoke method without arguments', () => {
+  it('Invoke method without arguments', () => {
 
     let result = X.path.personas[123].phones.type();
 
-    expect(result).toHaveLength(4);
-    expect(result[0]).toBe('personas');
-    expect(result[1]).toBe('123');
-    expect(result[2]).toBe('phones');
-    expect(result[3]).toBe('type');
+    expect(result).to.have.lengthOf(4);
+    expect(result[0]).to.eq('personas');
+    expect(result[1]).to.eq('123');
+    expect(result[2]).to.eq('phones');
+    expect(result[3]).to.eq('type');
   });
-  test('Reuse proxy', () => {
+  it('Reuse proxy', () => {
 
     let result = X.path.personas[123]();
-    expect(result).toHaveLength(2);
-    expect(result[0]).toBe('personas');
-    expect(result[1]).toBe('123');
+    expect(result).to.have.length(2);
+    expect(result[0]).to.eq('personas');
+    expect(result[1]).to.eq('123');
 
     result = X.path.phones.mobile();
-    expect(result).toHaveLength(2);
-    expect(result[0]).toBe('phones');
-    expect(result[1]).toBe('mobile');
+    expect(result).to.have.lengthOf(2);
+    expect(result[0]).to.eq('phones');
+    expect(result[1]).to.eq('mobile');
 
   });
-  test('Subproxy', () => {
+  it('Subproxy', () => {
 
     let personas = X.get.personas;
 
     let result = personas({ foo: 'bar' }, 4);
-    expect(result.path).toHaveLength(1);
-    expect(result.path[0]).toBe('personas');
-    expect(result.n).toBe(4);
+    expect(result.path).to.have.lengthOf(1);
+    expect(result.path[0]).to.eq('personas');
+    expect(result.n).to.eq(4);
 // tslint:disable-next-line: no-string-literal
-    expect(result.o['foo']).toBe('bar');
+    expect(result.o['foo']).to.eq('bar');
 
     result = personas({}, 5);
-    expect(result.path).toHaveLength(1);
-    expect(result.path[0]).toBe('personas');
-    expect(result.n).toBe(5);
-    expect(JSON.stringify(result.o)).toBe(JSON.stringify({}));
+    expect(result.path).to.have.lengthOf(1);
+    expect(result.path[0]).to.eq('personas');
+    expect(result.n).to.eq(5);
+    expect(JSON.stringify(result.o)).to.eq(JSON.stringify({}));
 
     result = personas.phones({}, 6);
-    expect(result.path).toHaveLength(2);
-    expect(result.path[0]).toBe('personas');
-    expect(result.path[1]).toBe('phones');
-    expect(result.n).toBe(6);
+    expect(result.path).to.have.lengthOf(2);
+    expect(result.path[0]).to.eq('personas');
+    expect(result.path[1]).to.eq('phones');
+    expect(result.n).to.eq(6);
 
     result = personas[44]({}, 7);
-    expect(result.path).toHaveLength(2);
-    expect(result.path[0]).toBe('personas');
-    expect(result.path[1]).toBe('44');
-    expect(result.n).toBe(7);
+    expect(result.path).to.have.lengthOf(2);
+    expect(result.path[0]).to.eq('personas');
+    expect(result.path[1]).to.eq('44');
+    expect(result.n).to.eq(7);
   });
 });

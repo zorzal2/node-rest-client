@@ -1,10 +1,10 @@
 import Logger from '@zorzal2/logger';
 import { AppError, txid } from '@zorzal2/common';
 import { ErrorCodes } from '../error-codes';
-import Axios, { AxiosInstance } from 'axios';
+import { AxiosInstance, AxiosStatic } from 'axios';
 import Context from '@zorzal2/context';
 import { StatusErrorCodes, HttpRequest } from './model';
-import Config from '../conf';
+import Config from '../conf/conf';
 
 const logger = Logger.create('http-client');
 
@@ -19,9 +19,7 @@ const errorCodeByStatus: StatusErrorCodes = {
 };
 
 /** Construye un AppError a partir de un Error capturado al hacer el request */
-function buildAppError(cause: any, { url, operation}: HttpRequest) {
-  cause = cause || {};
-
+function buildAppError(cause: any, { url, method}: HttpRequest) {
   let message;
   let code;
   let info;
@@ -41,7 +39,7 @@ function buildAppError(cause: any, { url, operation}: HttpRequest) {
     // connection error, timeout, etc.
     message = cause.message || ErrorCodes.requestError.message;
     code = cause.code || ErrorCodes.requestError.code;
-    info = { method: operation.method, url };
+    info = cause.info || { method: method.name, url };
   }
 
   return new AppError(message, code, info, cause);
@@ -50,18 +48,18 @@ function buildAppError(cause: any, { url, operation}: HttpRequest) {
 /** Obtiene los headers a propagar y el TxID. Si no existe, lo crea. */
 function buildHeaders(): object {
   let tx = Context.get('txid') || txid.create();
-  let customHeaders = Context.get('custom-headers');
-  return { 'X-TxID': tx, ...customHeaders };
+  let customHeaders = Context.get('xheaders');
+  return { 'x-txid': tx, ...customHeaders };
 }
 
 /**
  * Construye un cliente REST
  */
-async function execute(axios: AxiosInstance, { operation, url, data = {} }: HttpRequest): Promise<any> {
+async function execute(axios: AxiosInstance, { method, url, data = {} }: HttpRequest): Promise<any> {
   const response = await axios({
     url,
-    method: operation.method,
-    data: operation.requiresAnObject ? data : undefined,
+    method: method.name,
+    data: method.requiresAnObject ? data : undefined,
     headers: buildHeaders()
   });
   return response.data;
@@ -88,7 +86,7 @@ class Client {
 export type HttpClient = Client;
 
 /** Crea una instancia de cliente HTTP */
-export default function create(endpointUrl: string, timeout?: number): HttpClient {
+export function createHttpClient(Axios: AxiosStatic, endpointUrl: string, timeout?: number): HttpClient {
   try {
     let url = new URL(endpointUrl);
     let axios = Axios.create({
