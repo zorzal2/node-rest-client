@@ -32,7 +32,7 @@
     "@zorzal2/context": "^0.1.2",
     "@zorzal2/logger": "^0.1.4",
     "axios": "^0.18.1",
-    "qs": "^6.7.0"
+    "qs": "^6.7.3"
   },
   "devDependencies": {
     "@types/chai": "^4.1.7",
